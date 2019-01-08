@@ -30,13 +30,30 @@ class Signup extends Component{
         email: email,
         password: password
       });
-      this.render();
+      this.addUser();
     }
 
     event.preventDefault();
 
   }
 
+  addUser = () => {
+    var {email, password} = this.state;
+    console.log("going in for the fetch")
+    fetch('/signup/' + email + '/' + password)
+      .then(res => res.json())
+      .catch(res => {
+        console.log("No connection established for Signup");
+      });
+  }
+
+  componentDidMount() {
+    fetch('/signup')
+      .then(res => res.json())
+      .catch(res => {
+        console.log("No connection established for Signup");
+      });
+  }
   /*addList = (n,d) => {
     fetch('/profile/add/' + n + '/' + d)
       .then(res => res.json())

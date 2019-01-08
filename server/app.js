@@ -6,6 +6,7 @@ var logger = require('morgan');
 var firebase = require('firebase');
 
 var indexRouter = require('./routes/index');
+var signupRouter = require('./routes/signup');
 var usersRouter = require('./routes/users');
 var profileRouter = require('./routes/profile');
 
@@ -23,6 +24,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/home', indexRouter);
+app.use('/signup', signupRouter);
 app.use('/users', usersRouter);
 app.use('/profile', profileRouter);
 
