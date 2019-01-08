@@ -4,10 +4,19 @@ var express= require('express');
 const path = require('path');
 var axios = require('axios');
 var app = express();
+var firebase = require('firebase');
 var fs = require('fs');
 var way = path.join(__dirname, '../public/games.json');
 var data = fs.readFileSync(way);
 const request = require('request');
+
+var config = {
+  apiKey: "AIzaSyC_8_dOKhWyulFNKD9voJCfQOesW-GJUg8",
+  authDomain: "game-backlog-app.firebaseapp.com",
+  databaseURL: "https://game-backlog-app.firebaseio.com",
+  storageBucket: "game-backlog-app.appspot.com",
+};
+firebase.initializeApp(config);
 //var games = JSON.parse(data);
 
 /* GET home page. */
@@ -16,6 +25,19 @@ app.get('/', function(req, res, next) {
   var games = JSON.parse(data);
   res.json(games);
 });
+app.get('/signup/:email/:password', function(req,res,next){
+  var q = req.params;
+  var email = q.email;
+  var password = q.password;
+  firebase.auth().createUserWithEmailAndPassword(email, password).catch(function(error) {
+    // Handle Errors here.
+    var errorCode = error.code;
+    var errorMessage = error.message;
+    // ...
+  });
+
+});
+
 
 app.get('/api', function(req, res, next) {
   console.log("hello");

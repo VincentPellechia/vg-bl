@@ -3,6 +3,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var firebase = require('firebase');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -25,6 +26,14 @@ app.use('/home', indexRouter);
 app.use('/users', usersRouter);
 app.use('/profile', profileRouter);
 
+/*var config = {
+  apiKey: "AIzaSyC_8_dOKhWyulFNKD9voJCfQOesW-GJUg8",
+  authDomain: "game-backlog-app.firebaseapp.com",
+  databaseURL: "https://game-backlog-app.firebaseio.com",
+  storageBucket: "game-backlog-app.appspot.com",
+};
+firebase.initializeApp(config);
+*/
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
