@@ -5,6 +5,7 @@ import {Switch,BrowserRouter, Route} from 'react-router-dom';
 import Home from "./components/home"
 import Profile from "./components/profile"
 import Navbar from "./components/navbar"
+import Signup from "./components/signup"
 
 
 class App extends Component {
@@ -23,6 +24,10 @@ class App extends Component {
                 path="/profile"
                 render={props => <Profile {...props}/>}
                 />
+                <Route
+                  exact path="/signup"
+                  component={Signup}
+                  />
           </Switch>
           </div>
         </BrowserRouter>
