@@ -13,6 +13,13 @@ var profileRouter = require('./routes/profile');
 
 var app = express();
 
+/*var config = {
+  apiKey: "AIzaSyC_8_dOKhWyulFNKD9voJCfQOesW-GJUg8",
+  authDomain: "game-backlog-app.firebaseapp.com",
+  databaseURL: "https://game-backlog-app.firebaseio.com",
+  storageBucket: "game-backlog-app.appspot.com",
+};
+var fb = firebase.initializeApp(config);*/
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');

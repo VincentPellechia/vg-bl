@@ -2,7 +2,8 @@ var express = require('express');
 var router = express.Router();
 const path = require('path');
 var fs = require('fs');
-//const request = require('request');
+var firebase = require('../firebase');
+var database = firebase.database();
 
 const way = path.join(__dirname, '../public/games.json');
 

@@ -39,7 +39,6 @@ class Signup extends Component{
 
   addUser = () => {
     var {email, password} = this.state;
-    console.log("going in for the fetch")
     fetch('/signup/' + email + '/' + password)
       .then(res => res.json())
       .catch(res => {
@@ -48,28 +47,12 @@ class Signup extends Component{
   }
 
   componentDidMount() {
-    fetch('/signup')
+    /*fetch('/signup/')
       .then(res => res.json())
       .catch(res => {
         console.log("No connection established for Signup");
-      });
+      });*/
   }
-  /*addList = (n,d) => {
-    fetch('/profile/add/' + n + '/' + d)
-      .then(res => res.json())
-      .catch(res => {
-        console.log("No connection established !!!!");
-      });
-  }
-
-  getList = (n) => {
-    fetch('/home/api/' + n)
-      .then(res => res.json())
-      .then(games => this.setState({ games: games, isLoaded:true }))
-      .catch(res => {
-        console.log("No connection established fool");
-      });
-  }*/
 
     render(){
       var {email,password} = this.state;
