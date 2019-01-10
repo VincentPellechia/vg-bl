@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Tree from "./tree"
 
 class Home extends Component{
   constructor(props){
@@ -6,7 +7,8 @@ class Home extends Component{
 
     this.state = {
       isLoaded: false,
-      games: []
+      games: [],
+      headers: []
     };
 
     this.handleClick = this.handleClick.bind(this);
@@ -26,6 +28,7 @@ class Home extends Component{
     }
     else{
       this.getList(event.target.name.value);
+      this.setState({});
       this.render();
     }
 
@@ -36,6 +39,7 @@ class Home extends Component{
   handleClick(event){
     var e = JSON.parse(event.target.value);
     this.addList(e.name,e.id);
+
     event.preventDefault();
   }
 
@@ -44,46 +48,30 @@ class Home extends Component{
     //this.getList();
   }
 
-  addList = (n,d) => {
-    fetch('/profile/add',{
-      method:'POST',
-      headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({
-        "name": n
-      })
-    })
-      .then(res => res.json())
-      .then(games => this.setState({ games: games, isLoaded:true }))
-      .catch(res => {
-        console.log("No connection established !!!!");
-      });
-  }
-
   getList = (n) => {
     fetch('/home/api/' + n)
       .then(res => res.json())
-      .then(games => this.setState({ games: games, isLoaded:true }))
+      .then(games => this.setState({headers:["Name","Platforms","Release Date",""], games: games, isLoaded:true }))
       .catch(res => {
         console.log("No connection established fool");
       });
   }
 
     render(){
-      var {isLoaded, games} = this.state;
+      var {isLoaded, games, headers} = this.state;
       var name;
-      games.map(game=>{
+      var g = JSON.stringify(games);
+      /*games.map(game=>{
         game.game.platforms.map(name => console.log(name.name));
       });
-      const listgames = games.map(game =>
+      /*const listgames = games.map(game =>
         <li key={game.id}>
           {game.name}
           <button value={JSON.stringify(game)} onClick={this.handleClick}>Add to Log</button>
         </li>
-      );/*
+      );
       const listgames = games.map(game =>
-
-          <TreeNode name={game.name} platforms={game.game.platforms} releasedate={game.game.first_release_date}/>
-
+        <Tree games={JSON.stringify(game)} name={game.name} platforms={game.game.platforms} releasedate={game.game.first_release_date}/>
       )*/
 
         return (
@@ -98,14 +86,14 @@ class Home extends Component{
               <input type="submit" value="Submit" />
             </form>
             <br/>
+            <Tree games={g} headers={headers}/>
 
-            <ul>{listgames}</ul>
           </div>
       );
       //}
     }
 }
-/*function TreeNode(props) {
+function TreeNode(props) {
   return (
     <tr>
       <td>{props.name}</td>
@@ -115,18 +103,30 @@ class Home extends Component{
     </tr>
   );
 }
-/*var Parent = React.createClass({
-  render: function() {
-    return <div>{this.props.children}</div>;
-  }
-});*/
-
 
 export default Home;
 
 /*addList = (n,d) => {
   fetch('/profile/add/' + n + '/' + d)
     .then(res => res.json())
+    .catch(res => {
+      console.log("No connection established !!!!");
+    });
+}
+addList = (n,d) => {
+  fetch('/profile/add',{
+    method:'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({
+      "name": n
+    })
+  })
+    .then(res => res.json())
+    .then(games => this.setState({
+      games: games,
+      isLoaded:true,
+
+     }))
     .catch(res => {
       console.log("No connection established !!!!");
     });

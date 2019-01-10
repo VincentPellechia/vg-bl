@@ -84,7 +84,7 @@ app.get('/api/:name', function(req, res, next) {
       'Accept': 'application/json',
       'user-key': 'c306790fada94d1ed57f7741ee15a5af',
     },
-    data: "fields name, game.first_release_date, game.platforms.name, company; search "+name+"; where game != null;limit:2;"
+    data: "fields name, game.platforms.name, game.first_release_date, company; search "+name+"; where game != null;limit:3;"
   })
   .then(result => {
     //getGame(result.data);
