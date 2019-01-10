@@ -4,6 +4,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var firebase = require('firebase');
+var bodyParser = require('body-parser');
 
 var indexRouter = require('./routes/index');
 var signupRouter = require('./routes/signup');
@@ -13,14 +14,6 @@ var profileRouter = require('./routes/profile');
 
 var app = express();
 
-/*var config = {
-  apiKey: "AIzaSyC_8_dOKhWyulFNKD9voJCfQOesW-GJUg8",
-  authDomain: "game-backlog-app.firebaseapp.com",
-  databaseURL: "https://game-backlog-app.firebaseio.com",
-  storageBucket: "game-backlog-app.appspot.com",
-};
-var fb = firebase.initializeApp(config);*/
-// view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
@@ -29,21 +22,13 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+//app.use(bodyParser.json())
 
 app.use('/home', indexRouter);
 app.use('/signup', signupRouter);
 app.use('/users', usersRouter);
 app.use('/profile', profileRouter);
 
-/*var config = {
-  apiKey: "AIzaSyC_8_dOKhWyulFNKD9voJCfQOesW-GJUg8",
-  authDomain: "game-backlog-app.firebaseapp.com",
-  databaseURL: "https://game-backlog-app.firebaseio.com",
-  storageBucket: "game-backlog-app.appspot.com",
-};
-firebase.initializeApp(config);
-*/
-// catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
 });

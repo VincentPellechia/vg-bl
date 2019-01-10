@@ -42,7 +42,7 @@ app.get('/:email/:password', function(req,res,next){
           "email": user.email
           //...
       };
-      ref.push(obj); // or however you wish to update the node
+      ref.push(obj);
   }
 
   function finished(mess){

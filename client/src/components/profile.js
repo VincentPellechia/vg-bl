@@ -61,13 +61,30 @@ class Profile extends Component{
 
   addList = () => {
     var name = this.state.name;
-    var id = this.state.id;
-    fetch('/profile/add/' + name + '/' + id)
+    fetch('/profile/add',{
+      method:'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({
+        "name": name
+      })
+    })
       .then(res => res.json())
+      .then(games => this.setState({ games: games, isLoaded:true }))
       .catch(res => {
         console.log("No connection established !!!!");
       });
   }
+
+  /*addList = () => {
+    var name = this.state.name;
+    var id = this.state.id;
+    fetch('/profile/add/'+name+'/'+id)
+      .then(res => res.json())
+      .catch(res => {
+        console.log("No connection established !!!!");
+      });
+      this.sayHi();
+  }*/
 
   render() {
     var {games, isLoaded, id, name} = this.state;
