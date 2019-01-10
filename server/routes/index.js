@@ -48,12 +48,24 @@ app.get('/api', function(req, res, next) {
       'Accept': 'application/json',
       'user-key': 'c306790fada94d1ed57f7741ee15a5af',
     },
-    data: "fields name; search \"Halo\"; where game != null;"
+    data: "fields name, game.first_release_date, game.platforms.name; search \"The Witcher 3\"; where game != null; limit: 1;"
   })
+  //game.involved_companies.company.name , game.platforms.name
   .then(result => {
-
-    console.log("Calling api with Halo!");
+    /*var mapped = result.data.map(x => {
+      x = {
+        name: x.name,
+        release_date: x.game.first_release_date
+      };
+      console.log(x);
+      //console.log(x.game.first_release_date);
+    })*/
+    //console.log(result.data[0]);
+    //mapRD(result.data);
+    //var obj =
+    console.log(mapped);
     //console.log(result.data);
+    //res.json(result.data);
     res.json(result.data);
   })
   .catch(result => {
@@ -72,11 +84,10 @@ app.get('/api/:name', function(req, res, next) {
       'Accept': 'application/json',
       'user-key': 'c306790fada94d1ed57f7741ee15a5af',
     },
-    data: "fields name; search "+name+"; where game != null;limit:20;"
+    data: "fields name, game.first_release_date, game.platforms.name, company; search "+name+"; where game != null;limit:2;"
   })
   .then(result => {
-    //console.log("It is providing a result here");
-    console.log("Call to api with name!");
+    //getGame(result.data);
     res.json(result.data);
   })
   .catch(result => {
