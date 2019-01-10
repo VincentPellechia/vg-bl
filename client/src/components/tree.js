@@ -2,9 +2,7 @@ import React, { Component } from 'react';
 
 class Tree extends Component{
   constructor(props){
-    //console.log(props);
     super(props);
-    //console.log(props);
 
     this.handleClick = this.handleClick.bind(this);
   }
@@ -13,10 +11,6 @@ class Tree extends Component{
     var e = JSON.parse(event.target.value);
     this.addList(e.name,e.id);
     event.preventDefault();
-  }
-
-  componentDidMount() {
-
   }
 
   addList = (n,d) => {
@@ -35,6 +29,7 @@ class Tree extends Component{
   }
 
   convertDate = (date) => {
+    if(date == null){return null;}
     var a = new Date(date * 1000);
     var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
     var year = a.getFullYear();
@@ -42,6 +37,11 @@ class Tree extends Component{
     var day = a.getDate();
     var time = month + ' '+ day + ' ' + year;
     return time;
+  }
+
+  mapPlatforms = (platforms) => {
+    if(platforms == null){return null;}
+    return platforms.map(pf => pf === null ? null : pf.name+" ");
   }
 
   render(){
@@ -54,7 +54,7 @@ class Tree extends Component{
           {game.name}
         </td>
         <td>
-          {game.game.platforms.map(pf => pf.name+" ")}
+          {this.mapPlatforms(game.game.platforms)}
         </td>
         <td>
           {this.convertDate(game.game.first_release_date)}
@@ -81,7 +81,6 @@ class Tree extends Component{
         </table>
       </div>
     );
-      //}
   }
 }
 

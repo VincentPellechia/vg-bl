@@ -28,7 +28,6 @@ class Home extends Component{
     }
     else{
       this.getList(event.target.name.value);
-      this.setState({});
       this.render();
     }
 
@@ -61,18 +60,6 @@ class Home extends Component{
       var {isLoaded, games, headers} = this.state;
       var name;
       var g = JSON.stringify(games);
-      /*games.map(game=>{
-        game.game.platforms.map(name => console.log(name.name));
-      });
-      /*const listgames = games.map(game =>
-        <li key={game.id}>
-          {game.name}
-          <button value={JSON.stringify(game)} onClick={this.handleClick}>Add to Log</button>
-        </li>
-      );
-      const listgames = games.map(game =>
-        <Tree games={JSON.stringify(game)} name={game.name} platforms={game.game.platforms} releasedate={game.game.first_release_date}/>
-      )*/
 
         return (
           <div>
@@ -90,7 +77,6 @@ class Home extends Component{
 
           </div>
       );
-      //}
     }
 }
 function TreeNode(props) {
