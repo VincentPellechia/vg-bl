@@ -5,6 +5,7 @@ class Signup extends Component{
     super(props);
 
     this.state = {
+      usern: '',
       email: '',
       password: ''
     };
@@ -24,9 +25,11 @@ class Signup extends Component{
       console.log("nothing inside");
     }
     else{
+      var usern = event.target.usern.value;
       var email = event.target.email.value;
       var password = event.target.password.value;
       this.setState({
+        usern: usern,
         email: email,
         password: password
       });
@@ -38,8 +41,14 @@ class Signup extends Component{
   }
 
   addUser = () => {
-    var {email, password} = this.state;
-    fetch('/signup/' + email + '/' + password)
+    //var {email, password} = this.state;
+    fetch('/signup',{
+      method: 'POST',
+      body: JSON.stringify(this.state),
+      headers:{
+        'Content-Type': 'application/json'
+      }
+    })
       .then(res => res.json())
       .catch(res => {
         console.log("No connection established for Signup");
@@ -55,12 +64,16 @@ class Signup extends Component{
   }
 
     render(){
-      var {email,password} = this.state;
+      var {usern,email,password} = this.state;
 
         return (
           <div>
           <form onSubmit={this.handleSubmit}>
             <label>
+              Username:
+              <br/>
+              <input type="text" name="usern" value={usern} onChange={this.handleChange} />
+              <br/>
               Email:
               <br/>
               <input type="text" name="email" value={email} onChange={this.handleChange} />

@@ -15,6 +15,7 @@ const way = path.join(__dirname, '../public/games.json');
 
 /* GET list of . */
 router.get('/', function(req, res, next) {
+  //var ref = database.ref('gamesList/'+UserID);
   var data = fs.readFileSync(way);
   var games = JSON.parse(data);
   res.json(games);

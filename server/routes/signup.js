@@ -1,5 +1,3 @@
-console.log("server is starting");
-
 var express= require('express');
 const path = require('path');
 var axios = require('axios');
@@ -8,11 +6,39 @@ var firebase = require('../firebase');
 var database = firebase.database();
 
 
-app.get('/', function(req, res, next) {
-  console.log("call to signup");
+app.post('/', function(req, res, next) {
+  var ref = database.ref('users');
+  var message = "Complete";
+  var {usern,email,password} = req.body;
 
-  res.json();
+  ref.on('child_added', function(snapshot){
+    if(snapshot.val().username === usern){
+      console.log("Exists");
+      message = "Username Already Exists!";
+      free = false;
+      ref.off();
+      finished(message);
+    }
+    else if(snapshot.val().email === email){
+      console.log("Exists");
+      message = "Email Already Exists!";
+      free = false;
+      finished(message);
+    }
+    else {
+      message = "Complete";
+    }
+  });
 
+  function finished(mess){
+      var rep = {
+        usen: usern,
+        email: email,
+        password: password,
+        message: mess
+      };
+    res.json(rep);
+  }
 });
 
 app.get('/:email/:password', function(req,res,next){
