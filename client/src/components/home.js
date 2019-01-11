@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Tree from "./tree"
+import Tree from "./tree";
 
 class Home extends Component{
   constructor(props){

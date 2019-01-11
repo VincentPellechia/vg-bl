@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Tree from "./tree";
 //import axios from 'axios';
 
 class Profile extends Component{
