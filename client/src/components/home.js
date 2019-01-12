@@ -79,16 +79,6 @@ class Home extends Component{
       );
     }
 }
-function TreeNode(props) {
-  return (
-    <tr>
-      <td>{props.name}</td>
-      <td>{props.platforms.map(platform => platform.name)}</td>
-      <td>{props.releasedate}</td>
-      <td><button value={JSON.stringify(props)}>Add to Log</button></td>
-    </tr>
-  );
-}
 
 export default Home;
 

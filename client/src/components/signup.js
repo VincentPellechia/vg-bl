@@ -50,6 +50,7 @@ class Signup extends Component{
       }
     })
       .then(res => res.json())
+      .then(res => alert(res.message))
       .catch(res => {
         console.log("No connection established for Signup");
       });
