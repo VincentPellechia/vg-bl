@@ -5,7 +5,7 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var firebase = require('firebase');
 var bodyParser = require('body-parser');
-
+var firebase = require('./firebase');
 var indexRouter = require('./routes/index');
 var signupRouter = require('./routes/signup');
 var usersRouter = require('./routes/users');
@@ -28,6 +28,15 @@ app.use('/home', indexRouter);
 app.use('/signup', signupRouter);
 app.use('/users', usersRouter);
 app.use('/profile', profileRouter);
+var user = firebase.auth().currentUser;
+
+if (user) {
+  // User is signed in.
+  console.log(user);
+} else {
+  // No user is signed in.
+  console.log("no user signed in");
+}
 
 app.use(function(req, res, next) {
   next(createError(404));
