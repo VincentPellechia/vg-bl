@@ -10,38 +10,39 @@ app.post('/', function(req, res, next) {
   var ref = database.ref('users');
   var message = "Complete";
   var {usern,email,password} = req.body;
-
-  ref.on('child_added', function(snapshot){
-    if(snapshot.val().username === usern){
-      console.log("Exists");
-      message = "Username Already Exists!";
-      free = false;
-      ref.off();
-      finished(message);
-    }
-    else if(snapshot.val().email === email){
-      console.log("Exists");
-      message = "Email Already Exists!";
-      free = false;
-      finished(message);
-    }
-    else {
-      message = "Complete";
-    }
+  firebase.auth().createUserWithEmailAndPassword(email, password)
+  .then(function(user){
+    var user = firebase.auth().currentUser;
+    logUser(user);
+    message = "You've Signed Up!"
+    finished(message);
+  })
+  .catch(function(error){
+    var errorCode = error.code;
+    message = error.message;
+    finished(message);
   });
-
+  function logUser(user) {
+    user.updateProfile({
+      displayName: usern
+    })
+    .catch(function(error){console.log(error)});
+    var ref = database.ref("users");
+    ref.child(firebase.auth().currentUser.uid).set({
+      username: usern,
+      email: email
+    });
+  }
   function finished(mess){
-      var rep = {
-        usen: usern,
-        email: email,
-        password: password,
-        message: mess
-      };
+    var rep = {
+      email: email,
+      message: mess
+    };
     res.json(rep);
   }
 });
 
-app.get('/:email/:password', function(req,res,next){
+/*app.get('/:email/:password', function(req,res,next){
   var q = req.params;
   var email = q.email;
   var password = q.password;
