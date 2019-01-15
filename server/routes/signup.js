@@ -10,25 +10,50 @@ app.post('/', function(req, res, next) {
   var ref = database.ref('users');
   var message = "Complete";
   var {usern,email,password} = req.body;
-  firebase.auth().createUserWithEmailAndPassword(email, password)
-  .then(function(user){
-    var user = firebase.auth().currentUser;
-    logUser(user);
-    message = "You've Signed Up!"
-    finished(message);
-  })
-  .catch(function(error){
-    var errorCode = error.code;
-    message = error.message;
-    finished(message);
-  });
+  usern = usern.toLowerCase();
+  checkUserName();
+
+  function checkUserName() {
+    if(usern.length > 15 || usern.length < 3){finished("Username Has To Be 3-15 Characters Long");}
+    else{
+      var unref = database.ref("usernames");
+      unref.once("value",function(snap) {
+        if(snap.child(usern).exists()){
+          finished("Username Exists!");
+        }
+        else {
+          firebase.auth().createUserWithEmailAndPassword(email, password)
+          .then(function(user){
+            var user = firebase.auth().currentUser;
+            setUserName();
+            logUser(user);
+            finished("You've Signed Up!");
+          })
+          .catch(function(error){
+            var errorCode = error.code;
+            message = error.message;
+            finished(message);
+          });
+        }
+      })
+    }
+  }
+  function setUserName() {
+    var uid = firebase.auth().currentUser.uid;
+    var unref = database.ref("usernames");
+    let data = {};
+    data[usern] = uid;
+    unref.update(data);
+  }
+
   function logUser(user) {
+    var uid = firebase.auth().currentUser.uid;
     user.updateProfile({
       displayName: usern
     })
     .catch(function(error){console.log(error)});
-    var ref = database.ref("users");
-    ref.child(firebase.auth().currentUser.uid).set({
+    var usref = database.ref("users");
+    usref.child(uid).set({
       username: usern,
       email: email
     });
@@ -81,25 +106,6 @@ app.post('/', function(req, res, next) {
     res.json(rep);
   }
 });
-
-/*
-firebase.auth().createUserWithEmailAndPassword(email, password).then(function(user) {
-    var user = firebase.auth().currentUser;
-    logUser(user); // Optional
-}, function(error) {
-    // Handle Errors here.
-    var errorCode = error.code;
-    var errorMessage = error.message;
-});
-
-function logUser(user) {
-    var ref = firebase.database().ref("users");
-    var obj = {
-        "user": user,
-        ...
-    };
-    ref.push(obj); // or however you wish to update the node
-}
 
 */
 
