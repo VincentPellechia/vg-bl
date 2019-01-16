@@ -9,20 +9,22 @@ class Tree extends Component{
 
   handleClick(event){
     var e = JSON.parse(event.target.value);
-    this.addList(e.name,e.id);
+    console.log(e);
+    this.addList(e.name,e.game.first_release_date,this.mapPlatforms(e.game.platforms));
     event.preventDefault();
   }
 
-  addList = (n,d) => {
+  addList = (n,d,p) => {
     fetch('/profile/add',{
       method:'POST',
       headers: {'Content-Type':'application/json'},
       body: JSON.stringify({
-        "name": n
+        "name": n,
+        "first_release_date": d,
+        "platforms": p
       })
     })
-      .then(res => res.json())
-      .then(games => this.setState({ games: games, isLoaded:true }))
+      //.then(res => alert(JSON.stringify(res)))
       .catch(res => {
         console.log("No connection established !!!!");
       });
@@ -48,8 +50,9 @@ class Tree extends Component{
     var headers = this.props.headers;
     var games = JSON.parse(this.props.games);
 
+    // ADD COMPANIES TO DATABASE AS WELL
     const listgames = games.map(game =>
-      <tr key = {game.name}>
+      <tr key = {game.name+ "" + game.game.first_release_date}>
         <td>
           {game.name}
         </td>

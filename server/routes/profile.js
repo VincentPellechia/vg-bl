@@ -8,11 +8,6 @@ var bodyParser = require('body-parser');
 
 const way = path.join(__dirname, '../public/games.json');
 
-//router.use(bodyParser.json());
-//router.use(bodyParser.urlencoded({ extended: true }));
-
-//console.log(req.body);
-
 /* GET list of . */
 router.get('/', function(req, res, next) {
   //var ref = database.ref('gamesList/'+UserID);
@@ -46,29 +41,32 @@ router.get('/add/:name/:id?', function(req,res,next) {
 router.post('/add', function(req, res){
   var ref = database.ref('games');
   var name = req.body.name;
+  var platforms = req.body.platforms;
+  var frd = req.body.first_release_date;
   ref.orderByKey().equalTo(name).once('value', function(snapshot){
     if(snapshot.val() !== null){
+      res.send('Game already exists!');
       console.log("there is a game");
     }
     else {
       addGame();
-      console.log("there isn't a game");
     }
 
     function addGame() {
       console.log(name);
       ref = database.ref('games/'+name);
       ref.set({
-        platform: "test",
+        platforms: platforms,
         publisher: "test",
-        releaseDate: "test"
+        releaseDate: frd
 
       });
+      res.send('Game has been added!');
     }
-    console.log(snapshot.val());
+    //console.log(snapshot.val());
   });
 
-  res.send('this is the answer!');
+
 })
 
 function finished(err){

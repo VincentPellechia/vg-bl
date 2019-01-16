@@ -4,20 +4,11 @@ var express= require('express');
 const path = require('path');
 var axios = require('axios');
 var app = express();
-//var firebase = require('firebase');
 var fs = require('fs');
 var way = path.join(__dirname, '../public/games.json');
 var data = fs.readFileSync(way);
 const request = require('request');
 
-/*var config = {
-  apiKey: "AIzaSyC_8_dOKhWyulFNKD9voJCfQOesW-GJUg8",
-  authDomain: "game-backlog-app.firebaseapp.com",
-  databaseURL: "https://game-backlog-app.firebaseio.com",
-  storageBucket: "game-backlog-app.appspot.com",
-};
-firebase.initializeApp(config);
-//var games = JSON.parse(data);
 
 /* GET home page. */
 app.get('/', function(req, res, next) {
@@ -25,18 +16,6 @@ app.get('/', function(req, res, next) {
   var games = JSON.parse(data);
   res.json(games);
 });
-/*app.get('/signup/:email/:password', function(req,res,next){
-  var q = req.params;
-  var email = q.email;
-  var password = q.password;
-  firebase.auth().createUserWithEmailAndPassword(email, password).catch(function(error) {
-    // Handle Errors here.
-    var errorCode = error.code;
-    var errorMessage = error.message;
-    // ...
-  });
-
-});*/
 
 
 app.get('/api', function(req, res, next) {
@@ -84,9 +63,10 @@ app.get('/api/:name', function(req, res, next) {
       'Accept': 'application/json',
       'user-key': 'c306790fada94d1ed57f7741ee15a5af',
     },
-    data: "fields name, game.platforms.name, game.first_release_date, company; search "+name+"; where game != null;limit:10;"
+    data: "fields name, game.platforms.name, game.first_release_date, game.involved_companies.company.name; search "+name+"; where game != null;limit:10;"
   })
   .then(result => {
+    console.log(result.data[0].game.involved_companies);
     //getGame(result.data);
     res.json(result.data);
   })
