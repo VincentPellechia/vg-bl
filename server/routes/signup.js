@@ -67,6 +67,45 @@ app.post('/', function(req, res, next) {
   }
 });
 
+
+app.post('/signin', function(req, res, next) {
+  var ref = database.ref('users');
+  var message = "Complete";
+  var {email,password} = req.body;
+  //usern = usern.toLowerCase();
+
+  firebase.auth().signInWithEmailAndPassword(email, password)
+  .then(function(result){
+    var user = {
+      uid: result.user.uid,
+      usern: result.user.displayName,
+      email: result.user.email
+    }
+    res.json(user);
+    console.log(result.user);
+  })
+
+  .catch(function(error) {
+    // Handle Errors here.
+    var errorCode = error.code;
+    var errorMessage = error.message;
+    console.log(errorMessage);
+    // ...
+  });
+});
+
+app.post('/signout', function(req, res, next) {
+  var ref = database.ref('users');
+  var message = "Complete";
+  //usern = usern.toLowerCase();
+
+  firebase.auth().signOut().then(function() {
+    res.send("Logged Out");
+  }).catch(function(error) {
+  // An error happened.
+  });
+});
+
 /*app.get('/:email/:password', function(req,res,next){
   var q = req.params;
   var email = q.email;

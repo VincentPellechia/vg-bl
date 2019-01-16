@@ -11,7 +11,6 @@ class Home extends Component{
       headers: []
     };
 
-    this.handleClick = this.handleClick.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
@@ -33,13 +32,6 @@ class Home extends Component{
 
     event.preventDefault();
 
-  }
-
-  handleClick(event){
-    var e = JSON.parse(event.target.value);
-    this.addList(e.name,e.id);
-
-    event.preventDefault();
   }
 
   componentDidMount() {
