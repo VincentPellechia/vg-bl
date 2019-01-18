@@ -14,12 +14,12 @@ app.post('/', function(req, res, next) {
   checkUserName();
 
   function checkUserName() {
-    if(usern.length > 15 || usern.length < 3){finished("Username Has To Be 3-15 Characters Long");}
+    if(usern.length > 15 || usern.length < 3){failed("Username Has To Be 3-15 Characters Long");}
     else{
       var unref = database.ref("usernames");
       unref.once("value",function(snap) {
         if(snap.child(usern).exists()){
-          finished("Username Exists!");
+          failed("Username Exists!");
         }
         else {
           firebase.auth().createUserWithEmailAndPassword(email, password)
@@ -27,12 +27,12 @@ app.post('/', function(req, res, next) {
             var user = firebase.auth().currentUser;
             setUserName();
             logUser(user);
-            finished("You've Signed Up!");
+            finished(user);
           })
           .catch(function(error){
             var errorCode = error.code;
             message = error.message;
-            finished(message);
+            failed(message);
           });
         }
       })
@@ -58,10 +58,24 @@ app.post('/', function(req, res, next) {
       email: email
     });
   }
-  function finished(mess){
+  function failed(mess){
     var rep = {
+      usern: usern,
       email: email,
       message: mess
+    };
+    res.json(rep);
+  }
+  function finished(user){
+    //console.log(firebase.auth().currentUser.uid);
+    var x ={
+      uid: user.uid,
+      usern: usern,
+      email: email
+    }
+    var rep = {
+      user: x,
+      message: "You've Signed Up!"
     };
     res.json(rep);
   }
@@ -76,13 +90,16 @@ app.post('/signin', function(req, res, next) {
 
   firebase.auth().signInWithEmailAndPassword(email, password)
   .then(function(result){
+
     var user = {
       uid: result.user.uid,
       usern: result.user.displayName,
       email: result.user.email
     }
+    //console.log(result.user);
+    //console.log(user);
     res.json(user);
-    console.log(result.user);
+
   })
 
   .catch(function(error) {

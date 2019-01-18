@@ -6,27 +6,25 @@ import Home from "./components/home"
 import Profile from "./components/profile"
 import Navbar from "./components/navbar"
 import Signup from "./components/signup"
+import Login from "./components/login"
 
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      user:null
-      /*user:{
-        usern: '',
-        id:''
-      }*/
+      user:null,
+      authed: false
     };
 
     this.login = this.login.bind(this);
     this.logout = this.logout.bind(this);
   }
 
-  login(){
+  login(email, pass){
     var obj = {
-      email:"test7@gmail.com",
-      password:"password"
+      email:email,
+      password:pass
     }
     fetch('/signup/signin',{
       method: 'POST',
@@ -38,8 +36,9 @@ class App extends Component {
     .then(result => result.json())
     .then(result => {
       //const user = result.user;
-      this.setState({user:result});
-      console.log(this.state.user);
+      this.setState({user:result,authed:true});
+
+      console.log(this.state);
     })
 
   }
@@ -54,44 +53,42 @@ class App extends Component {
   }
 
   render() {
+    const user = this.state.user;
       return (
         <BrowserRouter>
           <div className="App">
             <ul>
-              <li>
-              <Link to="/">Home</Link>
-              </li>
-              <li>
-              <Link to="/profile">Profile</Link>
-              </li>
-              <li>
-              <Link to="/signup">Sign up</Link>
-              </li>
+              <li><Link to="/">Home</Link></li>
+              <li><Link to="/profile">Profile</Link></li>
+              <li><Link to="/signup">Sign up</Link></li>
               <li>
               {this.state.user ?
-    <button onClick={this.logout}>Log Out</button>
-    :
-    <button onClick={this.login}>Log In</button>
-  }
+                <button onClick={this.logout}>Log Out</button>
+                :
+                <Link to="/login">Log In</Link>
+              }
               </li>
+              <li><Link to="/protected">Protected</Link></li>
             </ul>
             <Switch>
               <Route
                 exact path="/"
-                component={Home}
-              />
-              <Route
-                path="/profile"
-                render={props => <Profile {...props}/>}
+                component={props => <Home {...props} user={user}/>}
               />
               <Route
                 exact path="/signup"
-                component={Signup}
+                component={props => <Signup {...props} user={user} onSignup={this.login}/>}
+              />
+              <Route
+                exact path="/login"
+                component={props => <Login {...props} user={user} onLogin={this.login}/>}
               />
 
               <PrivateRoute
-                exact path="/protected"
-                component={Protected}
+                exact path="/profile"
+                authed={this.state.authed}
+                user={user}
+                component={Profile}
               />
             </Switch>
           </div>
@@ -100,6 +97,11 @@ class App extends Component {
       }
 }
 
+/*
+<Route
+  path="/profile"
+  render={props => <Profile {...props} user={user}/>}
+/>
 const fbAuth = {
   //isAuthenticated:false,
   authenticate(cb){
@@ -126,24 +128,15 @@ const fbAuth = {
       this.setState({user: null});
     })
   }
-  /*isAuthenticated: false,
-  authenticate(cb) {
-    this.isAuthenticated = true
-    setTimeout(cb, 100) // fake async
-  },
-  signout(cb) {
-    this.isAuthenticated = false
-    setTimeout(cb, 100) // fake async
-  }*/
-}
+}*/
 
 const Protected = () => <h3>Protected</h3>
 
-const PrivateRoute = ({ component: Component, ...rest }) => (
-  <Route {...rest} render={(props) => (
-    fbAuth.isAuthenticated === true
-      ? <Component {...props} />
-      : <Redirect to='/login' />
+const PrivateRoute = ({ component: Component,authed,user, ...rest }) => (
+  <Route {...rest} user={user} render={(props) => (
+      authed === true
+      ? <Component {...props} user ={user}/>
+      : <Redirect to={{pathname:'/login', state:{from: props.location}}}/>
   )} />
 )
 

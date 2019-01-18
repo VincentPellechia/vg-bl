@@ -6,6 +6,7 @@ class Profile extends Component{
   constructor(props){
     super(props);
 
+
     this.state = {
       games:[],
       isLoaded: false,
@@ -88,6 +89,7 @@ class Profile extends Component{
   }*/
 
   render() {
+    console.log(this.props);
     var {games, isLoaded, id, name} = this.state;
     if(!isLoaded){
       return <div>Loading...</div>;

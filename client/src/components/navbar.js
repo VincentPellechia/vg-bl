@@ -28,6 +28,9 @@ class Navbar extends Component{
                 <li className="Nav__item">
                   <Link className="Nav__link" to="/signup">Sign Up</Link>
                 </li>
+                <li className="Nav__item">
+                  <Link className="Nav__link" to="/protected">protected</Link>
+                </li>
               </ul>
             </div>
           </div>

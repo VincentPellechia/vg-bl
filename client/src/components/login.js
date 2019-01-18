@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
 
-class Signup extends Component{
+class Login extends Component{
   constructor(props){
     super(props);
 
     this.state = {
-      usern: '',
       email: '',
       password: ''
     };
@@ -25,38 +24,11 @@ class Signup extends Component{
       console.log("nothing inside");
     }
     else{
-      var usern = event.target.usern.value;
       var email = event.target.email.value;
       var password = event.target.password.value;
-      this.setState({
-        usern: usern,
-        email: email,
-        password: password
-      });
-      this.addUser();
+      this.props.onLogin(email, password);
     }
-
     event.preventDefault();
-
-  }
-
-  addUser = () => {
-    //var {email, password} = this.state;
-    fetch('/signup',{
-      method: 'POST',
-      body: JSON.stringify(this.state),
-      headers:{
-        'Content-Type': 'application/json'
-      }
-    })
-      .then(res => res.json())
-      .then(res => {
-        alert(res.message);
-        this.props.onSignup(this.state.email,this.state.password);
-      })
-      .catch(res => {
-        console.log("No connection established for Signup");
-      });
   }
 
   componentDidMount() {
@@ -64,17 +36,13 @@ class Signup extends Component{
   }
 
     render(){
-      var {usern,email,password} = this.state;
+      var {email,password} = this.state;
 
         return (
           <div>
-          <h1>Signup</h1>
+          <h1>Login</h1>
           <form onSubmit={this.handleSubmit}>
             <label>
-              Username:
-              <br/>
-              <input type="text" name="usern" value={usern} onChange={this.handleChange} />
-              <br/>
               Email:
               <br/>
               <input type="text" name="email" value={email} onChange={this.handleChange} />
@@ -90,4 +58,4 @@ class Signup extends Component{
       );
     }
 }
-export default Signup;
+export default Login;
