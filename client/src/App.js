@@ -49,7 +49,7 @@ class App extends Component {
         'Content-Type': 'application/json'
       }
     })
-    .then(result => this.setState({user:null}))
+    .then(result => this.setState({user:null, authed:false}))
   }
 
   render() {
@@ -68,7 +68,6 @@ class App extends Component {
                 <Link to="/login">Log In</Link>
               }
               </li>
-              <li><Link to="/protected">Protected</Link></li>
             </ul>
             <Switch>
               <Route
@@ -129,8 +128,6 @@ const fbAuth = {
     })
   }
 }*/
-
-const Protected = () => <h3>Protected</h3>
 
 const PrivateRoute = ({ component: Component,authed,user, ...rest }) => (
   <Route {...rest} user={user} render={(props) => (

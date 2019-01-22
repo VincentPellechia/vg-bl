@@ -49,24 +49,45 @@ class Tree extends Component{
   render(){
     var headers = this.props.headers;
     var games = JSON.parse(this.props.games);
+    console.log(games);
+    var listgames;
+
+    if(this.props.profile){
+      listgames = games.map(game =>
+        <tr key = {game.name}>
+          <td>
+            {game.name}
+          </td>
+          <td>
+            {game.status}
+          </td>
+          <td>
+            <button value={JSON.stringify(game)} onClick={this.handleClick}>Remove from Log</button>
+          </td>
+        </tr>
+      );
+    }
+    else {
+      listgames = games.map(game =>
+        <tr key = {game.name+ "" + game.game.first_release_date}>
+          <td>
+            {game.name}
+          </td>
+          <td>
+            {this.mapPlatforms(game.game.platforms)}
+          </td>
+          <td>
+            {this.convertDate(game.game.first_release_date)}
+          </td>
+          <td>
+            <button value={JSON.stringify(game)} onClick={this.handleClick}>Add to Log</button>
+          </td>
+        </tr>
+      );
+    }
 
     // ADD COMPANIES TO DATABASE AS WELL
-    const listgames = games.map(game =>
-      <tr key = {game.name+ "" + game.game.first_release_date}>
-        <td>
-          {game.name}
-        </td>
-        <td>
-          {this.mapPlatforms(game.game.platforms)}
-        </td>
-        <td>
-          {this.convertDate(game.game.first_release_date)}
-        </td>
-        <td>
-          <button value={JSON.stringify(game)} onClick={this.handleClick}>Add to Log</button>
-        </td>
-      </tr>
-    );
+
     const listheaders = headers.map(header =>
       <td key={header}>
         {header}

@@ -16,6 +16,42 @@ router.get('/', function(req, res, next) {
   res.json(games);
 });
 
+router.get('/:userID', function(req, res){
+  var data = req.params;
+  var userid = data.userID;
+  var ref = database.ref('gamesList/'+userid);
+  ref.once('value').then(function(snapshot) {
+    /*snapshot.forEach(function(childSnapshot){
+      console.log(childSnapshot.val());
+    })*/
+    let arr = Object.keys(snapshot.val() || {}) .map(k => snapshot.val()[k]);
+
+    res.json(arr);
+    // ...
+  });
+  /*ref.orderByKey().equalTo(name).once('value', function(snapshot){
+    if(snapshot.val() !== null){
+      res.send('Game already exists!');
+      console.log("there is a game");
+    }
+    else {
+      addGame();
+    }
+
+    function addGame() {
+      console.log(name);
+      ref = database.ref('gamesList/'+userid+'/'+name);
+      ref.set({
+        rating: null,
+        status: "Pending"
+      });
+      res.send('Game has been added!');
+    }
+    //console.log(snapshot.val());
+  });*/
+
+
+})
 /* GET profile listing.
 router.get('/add/:name/:id?', function(req,res,next) {
   //console.log(req.body);
@@ -60,6 +96,36 @@ router.post('/add', function(req, res){
         publisher: "test",
         releaseDate: frd
 
+      });
+      res.send('Game has been added!');
+    }
+    //console.log(snapshot.val());
+  });
+
+
+})
+
+router.post('/:userID/add', function(req, res){
+  var data = req.params;
+  var userid = data.userID;
+  var name = req.body.name;
+  var ref = database.ref('gamesList/'+userid);
+  ref.orderByKey().equalTo(name).once('value', function(snapshot){
+    if(snapshot.val() !== null){
+      res.send('Game already exists!');
+      console.log("there is a game");
+    }
+    else {
+      addGame();
+    }
+
+    function addGame() {
+      console.log(name);
+      ref = database.ref('gamesList/'+userid+'/'+name);
+      ref.set({
+        rating: null,
+        status: "Pending",
+        name: name
       });
       res.send('Game has been added!');
     }
