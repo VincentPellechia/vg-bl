@@ -56,7 +56,7 @@ class Profile extends Component{
     var userid = this.props.user.uid;
     fetch('/profile/'+userid)
       .then(res => res.json())
-      //.then(games => this.setState({ games: games, isLoaded:true }))
+      .then(games => this.setState({ games: games, isLoaded:true }))
       .catch(res => {
         console.log("No connection established !!!!");
       });
@@ -92,13 +92,13 @@ class Profile extends Component{
 
   render() {
     var {games, isLoaded, id, name} = this.state;
+    var g = JSON.stringify(games);
     if(!isLoaded){
       return <div>Loading...</div>;
     }
     else{
       return (
         <div className="App">
-          <Tree games={games} headers={["name","status"]} profile={true}/>
           <br/>
 
           <form onSubmit={this.handleSubmit}>
@@ -114,6 +114,8 @@ class Profile extends Component{
             <br/>
             <input type="submit" value="Submit" />
           </form>
+
+          <Tree games={g} headers={["name","status",""]} profile={true}/>
 
         </div>
       );

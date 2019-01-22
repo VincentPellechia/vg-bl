@@ -21,13 +21,8 @@ router.get('/:userID', function(req, res){
   var userid = data.userID;
   var ref = database.ref('gamesList/'+userid);
   ref.once('value').then(function(snapshot) {
-    /*snapshot.forEach(function(childSnapshot){
-      console.log(childSnapshot.val());
-    })*/
-    let arr = Object.keys(snapshot.val() || {}) .map(k => snapshot.val()[k]);
-
+    let arr = Object.keys(snapshot.val() || {}).map(k => snapshot.val()[k]);
     res.json(arr);
-    // ...
   });
   /*ref.orderByKey().equalTo(name).once('value', function(snapshot){
     if(snapshot.val() !== null){

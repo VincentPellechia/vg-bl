@@ -8,7 +8,6 @@ import Navbar from "./components/navbar"
 import Signup from "./components/signup"
 import Login from "./components/login"
 
-
 class App extends Component {
   constructor(props) {
     super(props);
@@ -20,6 +19,28 @@ class App extends Component {
     this.login = this.login.bind(this);
     this.logout = this.logout.bind(this);
   }
+
+  componentDidMount(){
+    fetch('/signup/auth',{
+      headers:{
+        'Content-Type': 'application/json'
+      }
+    })
+    .then(result => result.json())
+    .then(result => {
+      this.setState({user:result,authed:true});
+      //console.log(this.state);
+    })
+    .catch(res => {console.log("No user Logged in");});
+    //this.authListener();
+  }
+
+
+  authListener() {
+  // Typical usage (don't forget to compare props):
+
+}
+
 
   login(email, pass){
     var obj = {
@@ -37,7 +58,6 @@ class App extends Component {
     .then(result => {
       //const user = result.user;
       this.setState({user:result,authed:true});
-
       console.log(this.state);
     })
 
@@ -49,7 +69,9 @@ class App extends Component {
         'Content-Type': 'application/json'
       }
     })
-    .then(result => this.setState({user:null, authed:false}))
+    .then(result => {
+      this.setState({user:null, authed:false});
+    })
   }
 
   render() {
@@ -83,11 +105,22 @@ class App extends Component {
                 component={props => <Login {...props} user={user} onLogin={this.login}/>}
               />
 
+              //Work on this private Route
+              <PrivateRoute
+                exact path="/login"
+                authed={!this.state.authed}
+                user={user}
+                component={props => <Login {...props} user={user} onLogin={this.login}/>}
+                onLogin={this.Login}
+                redirect='/profile'
+              />
+
               <PrivateRoute
                 exact path="/profile"
                 authed={this.state.authed}
                 user={user}
                 component={Profile}
+                redirect='/login'
               />
             </Switch>
           </div>
@@ -129,11 +162,11 @@ const fbAuth = {
   }
 }*/
 
-const PrivateRoute = ({ component: Component,authed,user, ...rest }) => (
+const PrivateRoute = ({ component: Component,authed,user,redirect, ...rest }) => (
   <Route {...rest} user={user} render={(props) => (
       authed === true
       ? <Component {...props} user ={user}/>
-      : <Redirect to={{pathname:'/login', state:{from: props.location}}}/>
+      : <Redirect to={{pathname:redirect, state:{from: props.location}}}/>
   )} />
 )
 

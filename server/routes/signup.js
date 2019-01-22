@@ -81,6 +81,27 @@ app.post('/', function(req, res, next) {
   }
 });
 
+app.get('/auth', function(req, res, next) {
+  firebase.auth().onAuthStateChanged(function(user) {
+    if (user) {
+      // User is signed in.
+      var displayName = user.displayName;
+      var email = user.email;
+      var emailVerified = user.emailVerified;
+      var photoURL = user.photoURL;
+      var isAnonymous = user.isAnonymous;
+      var uid = user.uid;
+      var providerData = user.providerData;
+      res.json(user);
+      // ...
+    } else {
+      res.send("Not Signed In")
+        // User is signed out.
+        // ...   4
+    }
+  });
+});
+
 
 app.post('/signin', function(req, res, next) {
   var ref = database.ref('users');

@@ -9,7 +9,6 @@ class Tree extends Component{
 
   handleClick(event){
     var e = JSON.parse(event.target.value);
-    console.log(e);
     this.addList(e.name,e.game.first_release_date,this.mapPlatforms(e.game.platforms));
     event.preventDefault();
   }
@@ -49,7 +48,7 @@ class Tree extends Component{
   render(){
     var headers = this.props.headers;
     var games = JSON.parse(this.props.games);
-    console.log(games);
+
     var listgames;
 
     if(this.props.profile){
