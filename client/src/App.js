@@ -13,7 +13,8 @@ class App extends Component {
     super(props);
     this.state = {
       user:null,
-      authed: false
+      authed: false,
+      isLoaded: false
     };
 
     this.login = this.login.bind(this);
@@ -21,6 +22,12 @@ class App extends Component {
   }
 
   componentDidMount(){
+
+    this.authListener();
+  }
+
+
+  authListener() {
     fetch('/signup/auth',{
       headers:{
         'Content-Type': 'application/json'
@@ -28,18 +35,11 @@ class App extends Component {
     })
     .then(result => result.json())
     .then(result => {
-      this.setState({user:result,authed:true});
-      //console.log(this.state);
+      this.setState({user:result,authed:true,isLoaded:true});
+    //console.log(this.state);
     })
-    .catch(res => {console.log("No user Logged in");});
-    //this.authListener();
+    .catch(result => {this.setState({isLoaded:true});});
   }
-
-
-  authListener() {
-  // Typical usage (don't forget to compare props):
-
-}
 
 
   login(email, pass){
@@ -76,6 +76,11 @@ class App extends Component {
 
   render() {
     const user = this.state.user;
+    var isLoaded = this.state.isLoaded;
+    if(!isLoaded){
+      return <div>Loading...</div>;
+    }
+    else{
       return (
         <BrowserRouter>
           <div className="App">
@@ -100,10 +105,6 @@ class App extends Component {
                 exact path="/signup"
                 component={props => <Signup {...props} user={user} onSignup={this.login}/>}
               />
-              <Route
-                exact path="/login"
-                component={props => <Login {...props} user={user} onLogin={this.login}/>}
-              />
 
               //Work on this private Route
               <PrivateRoute
@@ -127,43 +128,12 @@ class App extends Component {
         </BrowserRouter>
         );
       }
+    }
 }
 
-/*
-<Route
-  path="/profile"
-  render={props => <Profile {...props} user={user}/>}
-/>
-const fbAuth = {
-  //isAuthenticated:false,
-  authenticate(cb){
-    fetch('/signup/login',{
-      method: 'POST',
-      body: JSON.stringify(this.state),
-      headers:{
-        'Content-Type': 'application/json'
-      }
-    })
-    .then(result => {
-      const user = result.user;
-      this.setState({user});
-    })
-  },
-  signout(cb) {
-    fetch('/signup/logout',{
-      method: 'POST',
-      headers:{
-        'Content-Type': 'application/json'
-      }
-    })
-    .then(result => {
-      this.setState({user: null});
-    })
-  }
-}*/
 
 const PrivateRoute = ({ component: Component,authed,user,redirect, ...rest }) => (
-  <Route {...rest} user={user} render={(props) => (
+  <Route {...rest} user={user} component={(props) => (
       authed === true
       ? <Component {...props} user ={user}/>
       : <Redirect to={{pathname:redirect, state:{from: props.location}}}/>

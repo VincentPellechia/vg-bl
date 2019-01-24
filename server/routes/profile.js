@@ -94,7 +94,6 @@ router.post('/add', function(req, res){
       });
       res.send('Game has been added!');
     }
-    //console.log(snapshot.val());
   });
 
 
@@ -126,8 +125,26 @@ router.post('/:userID/add', function(req, res){
     }
     //console.log(snapshot.val());
   });
+})
 
-
+router.post('/:userID/remove', function(req, res){
+  var data = req.params;
+  var userid = data.userID;
+  var name = req.body.name;
+  var ref = database.ref('gamesList/'+userid);
+  ref.orderByKey().equalTo(name).once('value', function(snapshot){
+    if(snapshot.val() !== null){
+      snapshot.forEach(function(child) {
+        child.ref.remove();
+        console.log("Removed!");
+      })
+      //snapshot.remove();
+      res.send('Game has been removed!');
+    }
+    else {
+        res.send('Game isn\'t there!');
+    }
+  });
 })
 
 function finished(err){

@@ -115,7 +115,7 @@ class Profile extends Component{
             <input type="submit" value="Submit" />
           </form>
 
-          <Tree games={g} headers={["name","status",""]} profile={true}/>
+          <Tree games={g} headers={["name","status",""]} user={this.props.user} profile={true}/>
 
         </div>
       );

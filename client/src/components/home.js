@@ -65,7 +65,7 @@ class Home extends Component{
               <input type="submit" value="Submit" />
             </form>
             <br/>
-            <Tree games={g} headers={headers}/>
+            <Tree games={g} headers={headers} user={this.props.user}/>
 
           </div>
       );

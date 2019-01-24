@@ -5,12 +5,35 @@ class Tree extends Component{
     super(props);
 
     this.handleClick = this.handleClick.bind(this);
+    this.handleClickRemove = this.handleClickRemove.bind(this);
   }
 
   handleClick(event){
     var e = JSON.parse(event.target.value);
     this.addList(e.name,e.game.first_release_date,this.mapPlatforms(e.game.platforms));
     event.preventDefault();
+  }
+
+  handleClickRemove(event){
+    console.log(event.target.value);
+    var e = event.target.value;
+    this.removeList(e);
+    event.preventDefault();
+  }
+
+  removeList = (e) => {
+    var userid = this.props.user.uid;
+    fetch('/profile/'+userid+'/remove',{
+      method:'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({
+        "name": e
+      })
+    })
+      //.then(res => alert(JSON.stringify(res)))
+      .catch(res => {
+        console.log("No connection established !!!!");
+      });
   }
 
   addList = (n,d,p) => {
@@ -61,7 +84,7 @@ class Tree extends Component{
             {game.status}
           </td>
           <td>
-            <button value={JSON.stringify(game)} onClick={this.handleClick}>Remove from Log</button>
+            <button value={game.name} onClick={this.handleClickRemove}>Remove from Log</button>
           </td>
         </tr>
       );
