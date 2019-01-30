@@ -37,13 +37,16 @@ class Tree extends Component{
   }
 
   addList = (n,d,p) => {
+    var userid = this.props.user.uid;
+    console.log(userid);
     fetch('/profile/add',{
       method:'POST',
       headers: {'Content-Type':'application/json'},
       body: JSON.stringify({
         "name": n,
         "first_release_date": d,
-        "platforms": p
+        "platforms": p,
+        "userid": userid
       })
     })
       //.then(res => alert(JSON.stringify(res)))

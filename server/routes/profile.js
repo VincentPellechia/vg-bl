@@ -74,16 +74,17 @@ router.post('/add', function(req, res){
   var name = req.body.name;
   var platforms = req.body.platforms;
   var frd = req.body.first_release_date;
+  var userid = req.body.userid;
   ref.orderByKey().equalTo(name).once('value', function(snapshot){
     if(snapshot.val() !== null){
-      res.send('Game already exists!');
+      //res.send('Game already exists!');
       console.log("there is a game");
     }
     else {
-      addGame();
+      addGameData();
     }
 
-    function addGame() {
+    function addGameData() {
       console.log(name);
       ref = database.ref('games/'+name);
       ref.set({
@@ -91,6 +92,28 @@ router.post('/add', function(req, res){
         publisher: "test",
         releaseDate: frd
 
+      });
+      //res.send('Game has been added!');
+    }
+  });
+
+  var refGl = database.ref('gamesList/'+userid);
+  refGl.orderByKey().equalTo(name).once('value', function(snapshot){
+    if(snapshot.val() !== null){
+      res.send('Game already exists!');
+      console.log("there is a game");
+    }
+    else {
+      addGameUser();
+    }
+
+    function addGameUser() {
+      console.log(name);
+      refGL = database.ref('gamesList/'+userid+'/'+name);
+      refGL.set({
+        rating: null,
+        status: "Pending",
+        name: name
       });
       res.send('Game has been added!');
     }
@@ -110,10 +133,10 @@ router.post('/:userID/add', function(req, res){
       console.log("there is a game");
     }
     else {
-      addGame();
+      addGameUser();
     }
 
-    function addGame() {
+    function addGameUser() {
       console.log(name);
       ref = database.ref('gamesList/'+userid+'/'+name);
       ref.set({
