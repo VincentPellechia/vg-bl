@@ -82,28 +82,47 @@ app.post('/', function(req, res, next) {
 });
 
 app.get('/auth', function(req, res, next) {
-  firebase.auth().onAuthStateChanged(function(user) {
+  var u = {
+    uid: null,
+    usern: null,
+    email: null
+  }
+  if(firebase.auth().currentUser){
+    finished(firebase.auth().currentUser)
+  }
+  else {
+    finished(u);
+  }
+  /*firebase.auth().onAuthStateChanged(function(user) {
     if (user) {
-      // User is signed in.
       var displayName = user.displayName;
+      u.uid = user.uid;
+      u.usern = user.displayName;
+      u.email = user.email;
       var email = user.email;
       var emailVerified = user.emailVerified;
       var photoURL = user.photoURL;
       var isAnonymous = user.isAnonymous;
       var uid = user.uid;
       var providerData = user.providerData;
-      res.json(user);
-      // ...
+      console.log("here");
+      finished(u);
+      //res.end();
+
     } else {
-      res.send("Not Signed In")
-        // User is signed out.
-        // ...   4
+      console.log("there");
+      //res.end();
+      finished(u);
     }
-  });
+
+  });*/
+  function finished(user){
+    res.json(user);
+  }
 });
 
 
-app.post('/signin', function(req, res, next) {
+app.post('/login', function(req, res, next) {
   var ref = database.ref('users');
   var message = "Complete";
   var {email,password} = req.body;
@@ -132,10 +151,9 @@ app.post('/signin', function(req, res, next) {
   });
 });
 
-app.post('/signout', function(req, res, next) {
+app.post('/logout', function(req, res, next) {
   var ref = database.ref('users');
   var message = "Complete";
-  //usern = usern.toLowerCase();
 
   firebase.auth().signOut().then(function() {
     res.send("Logged Out");
