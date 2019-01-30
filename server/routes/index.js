@@ -18,40 +18,6 @@ app.get('/', function(req, res, next) {
 });
 
 
-app.get('/api', function(req, res, next) {
-  console.log("hello");
-  axios({
-    method: 'POST',
-    url: 'https://api-v3.igdb.com/search',
-    headers: {
-      'Accept': 'application/json',
-      'user-key': 'c306790fada94d1ed57f7741ee15a5af',
-    },
-    data: "fields name, game.first_release_date, game.platforms.name; search \"The Witcher 3\"; where game != null; limit: 1;"
-  })
-  //game.involved_companies.company.name , game.platforms.name
-  .then(result => {
-    /*var mapped = result.data.map(x => {
-      x = {
-        name: x.name,
-        release_date: x.game.first_release_date
-      };
-      console.log(x);
-      //console.log(x.game.first_release_date);
-    })*/
-    //console.log(result.data[0]);
-    //mapRD(result.data);
-    //var obj =
-    console.log(mapped);
-    //console.log(result.data);
-    //res.json(result.data);
-    res.json(result.data);
-  })
-  .catch(result => {
-    console.log("No connection established???");
-  })
-});
-
 app.get('/api/:name', function(req, res, next) {
   var q = req.params;
   var name = "\""+q.name+"\"";
