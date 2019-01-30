@@ -35,8 +35,13 @@ class App extends Component {
     })
     .then(result => result.json())
     .then(result => {
-      this.setState({user:result,authed:true,isLoaded:true});
-    //console.log(this.state);
+      console.log(result);
+      if(result.uid){
+        this.setState({user:result,authed:true,isLoaded:true});
+      }
+      else {
+        this.setState({isLoaded:true});
+      }
     })
     .catch(result => {this.setState({isLoaded:true});});
   }
@@ -47,7 +52,7 @@ class App extends Component {
       email:email,
       password:pass
     }
-    fetch('/signup/signin',{
+    fetch('/signup/login',{
       method: 'POST',
       body: JSON.stringify(obj),
       headers:{
@@ -63,7 +68,7 @@ class App extends Component {
 
   }
   logout(){
-    fetch('/signup/signout',{
+    fetch('/signup/logout',{
       method: 'POST',
       headers:{
         'Content-Type': 'application/json'
@@ -97,10 +102,14 @@ class App extends Component {
               </li>
             </ul>
             <Switch>
-              <Route
+              <PrivateRoute
                 exact path="/"
-                component={props => <Home {...props} user={user}/>}
+                authed={this.state.authed}
+                user={user}
+                component={Home}
+                redirect='/login'
               />
+
               <Route
                 exact path="/signup"
                 component={props => <Signup {...props} user={user} onSignup={this.login}/>}
