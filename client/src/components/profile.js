@@ -1,5 +1,10 @@
 import React, { Component } from 'react';
 import Tree from "./tree";
+
+import Dropdown from 'react-bootstrap/lib/Dropdown';
+import Button from 'react-bootstrap/lib/Button';
+import ButtonToolbar from 'react-bootstrap/lib/ButtonToolbar';
+
 //import axios from 'axios';
 
 class Profile extends Component{
@@ -100,6 +105,10 @@ class Profile extends Component{
       return (
         <div className="App">
           <br/>
+          <ButtonToolbar>
+  <Button bsStyle="primary">Primary</Button>
+
+</ButtonToolbar>
 
           <form onSubmit={this.handleSubmit}>
             <label>
