@@ -35,7 +35,6 @@ class App extends Component {
     })
     .then(result => result.json())
     .then(result => {
-      console.log(result);
       if(result.uid){
         this.setState({user:result,authed:true,isLoaded:true});
       }
@@ -63,7 +62,6 @@ class App extends Component {
     .then(result => {
       //const user = result.user;
       this.setState({user:result,authed:true});
-      console.log(this.state);
     })
 
   }
